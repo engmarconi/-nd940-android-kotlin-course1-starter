@@ -29,7 +29,6 @@ class ShoeDetailsFragment : Fragment() {
         // Inflate the layout for this fragment
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_shoe_details, container, false)
-        setHasOptionsMenu(true)
         viewModel = ViewModelProvider(this).get(ShoeViewModel::class.java)
         binding.viewModel = viewModel
 
@@ -57,18 +56,5 @@ class ShoeDetailsFragment : Fragment() {
                 )
         }
         return binding.root
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.main_menu, menu)
-    }
-
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return NavigationUI.onNavDestinationSelected(
-            item,
-            requireView().findNavController()
-        ) || super.onOptionsItemSelected(item)
     }
 }
