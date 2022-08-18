@@ -5,16 +5,18 @@ import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.udacity.shoestore.R
 import com.udacity.shoestore.databinding.FragmentShoeDetailsBinding
 import com.udacity.shoestore.models.Shoe
+import com.udacity.shoestore.viewModels.ShoeViewModel
 
 class ShoeDetailsFragment : Fragment() {
 
-    private val newShoe: Shoe = Shoe("", 0.0, "", "", arrayListOf())
     lateinit var binding: FragmentShoeDetailsBinding
+    lateinit var viewModel : ShoeViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +30,10 @@ class ShoeDetailsFragment : Fragment() {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_shoe_details, container, false)
         setHasOptionsMenu(true)
-        binding.newShoe = newShoe
+        viewModel = ViewModelProvider(this).get(ShoeViewModel::class.java)
+        binding.viewModel = viewModel
+
+        binding.lifecycleOwner = this
 
         binding.cancelButton.setOnClickListener { view ->
             view.findNavController()
@@ -39,22 +44,15 @@ class ShoeDetailsFragment : Fragment() {
                 )
         }
         binding.saveButton.setOnClickListener { view ->
-            if(!isDataValid())
+            if(!viewModel.isDataValid())
             {
                 Toast.makeText(activity, "Please complete required data", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
-
-            binding.apply {
-                newShoe?.name = binding.shoeNameEditText.text.toString()
-                newShoe?.size = binding.shoeSizeEditText.text.toString().toDouble()
-                newShoe?.description = binding.descriptionEditText.text.toString()
-                newShoe?.company = binding.companyEditText.text.toString()
-            }
             view.findNavController()
                 .navigate(
                     ShoeDetailsFragmentDirections.actionShoeDetailsFragmentToShoeListFragment2(
-                        newShoe
+                        viewModel.newShoe.value
                     )
                 )
         }
@@ -72,12 +70,5 @@ class ShoeDetailsFragment : Fragment() {
             item,
             requireView().findNavController()
         ) || super.onOptionsItemSelected(item)
-    }
-
-    fun isDataValid(): Boolean {
-        return (binding.shoeNameEditText.text?.isEmpty() == false) &&
-                (binding.shoeSizeEditText.text?.isEmpty() == false) &&
-                (binding.companyEditText.text?.isEmpty() == false) &&
-                (binding.descriptionEditText.text?.isEmpty() == false)
     }
 }

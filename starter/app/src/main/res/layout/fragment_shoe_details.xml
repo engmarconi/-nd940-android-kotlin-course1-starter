@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- The design based on stack views so linear layouts are suitable -->
 <layout
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -7,8 +8,8 @@
 
     <data>
         <variable
-            name="newShoe"
-            type="com.udacity.shoestore.models.Shoe" />
+            name="viewModel"
+            type="com.udacity.shoestore.viewModels.ShoeViewModel" />
     </data>
     <LinearLayout
         android:layout_width="match_parent"
@@ -33,6 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/input_margin"
             android:hint="@string/enter_shoe_name"
+            android:text="@={viewModel.newShoe.name}"
             android:inputType="textAutoComplete" />
 
         <TextView
@@ -47,6 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/input_margin"
             android:hint="@string/enter_company_name"
+            android:text="@={viewModel.newShoe.company}"
             android:inputType="textAutoComplete" />
 
         <TextView
@@ -61,6 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/input_margin"
             android:hint="@string/enter_shoe_size"
+            android:text="@={`` + viewModel.newShoe.size}"
             android:inputType="numberDecimal" />
 
         <TextView
@@ -75,11 +79,11 @@
             android:layout_height="150dp"
             android:layout_marginBottom="@dimen/input_margin"
             android:hint="@string/enter_shoe_description"
+            android:text="@={viewModel.newShoe.description}"
             android:gravity="left|top"
             android:lines="5"
             android:minLines="5"
             android:inputType="text" />
-
 
         <LinearLayout
             android:layout_width="match_parent"
